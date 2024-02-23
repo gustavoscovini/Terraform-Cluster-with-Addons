@@ -11,6 +11,11 @@ provider "huaweicloud" {
   secret_key = var.hwcloud_sk
 }
 
+provider "kubernetes" {
+  config_path    = "C:/Users/g50037306/.kube/config"
+  config_context = "external"
+}
+
 #Example on how to create a node pool on huawei cloud CCE
 resource "huaweicloud_cce_node_pool" "node_pool_first" {
   cluster_id         = huaweicloud_cce_cluster.cluster.id
@@ -25,7 +30,6 @@ resource "huaweicloud_cce_node_pool" "node_pool_first" {
   scale_down_cooldown_time = 100
   priority                 = 1
   type                     = "vm"
-  charging_mode = "spot"
 
   root_volume {
     size       = 50
@@ -37,23 +41,22 @@ resource "huaweicloud_cce_node_pool" "node_pool_first" {
   }
 }
 
-
+#Example on how to create a node pool on huawei cloud CCE
 resource "huaweicloud_cce_node" "my_only_node" {
   cluster_id        = huaweicloud_cce_cluster.cluster.id
   name              = "node-dettached"
   flavor_id         = "c6ne.2xlarge.4"
   availability_zone = "sa-brazil-1a"
   password = var.password
-  charging_mode = "spot"
 
 
   root_volume {
     size       = 40
-    volumetype = "SATA"
+    volumetype = "SAS"
   }
   data_volumes {
     size       = 100
-    volumetype = "SATA"
+    volumetype = "SAS"
   }
 
   // Assign EIP

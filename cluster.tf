@@ -17,6 +17,18 @@ resource "huaweicloud_vpc_subnet" "subnet-2" {
   vpc_id            = huaweicloud_vpc.vpc.id
 }
 
+resource "huaweicloud_vpc_eip" "myeip" {
+  publicip {
+    type = "5_bgp"
+  }
+  bandwidth {
+    name        = "test"
+    size        = 8
+    share_type  = "PER"
+    charge_mode = "traffic"
+  }
+}
+
 #Create a CCE Cluster Turbo in Huawei Cloud
 resource "huaweicloud_cce_cluster" "cluster" {
   name      = "cluster-huawei"
@@ -25,6 +37,8 @@ resource "huaweicloud_cce_cluster" "cluster" {
   subnet_id = huaweicloud_vpc_subnet.subnet-1.id
   cluster_version = "v1.27" #If not specified, gets the latest cluster version available
   container_network_type = "eni" #Cloud Native Network 2.0
+  authentication_mode    = "rbac"
+  eip                    = huaweicloud_vpc_eip.myeip.address
   eni_subnet_id = join(",", [
     huaweicloud_vpc_subnet.subnet-1.ipv4_subnet_id,
     huaweicloud_vpc_subnet.subnet-2.ipv4_subnet_id
