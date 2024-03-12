@@ -5,12 +5,12 @@ locals {
 data "huaweicloud_cce_addon_template" "autoscaler_addon" {
   name       = "autoscaler"
   cluster_id = huaweicloud_cce_cluster.cluster.id
-  version    = "1.27.51"
+  version    = "1.27.53"
 }
 
 resource "huaweicloud_cce_addon" "addon_autoscaler_finish" {
   template_name = "autoscaler"
-  version       = "1.27.51"
+  version       = "1.27.53"
   cluster_id    = huaweicloud_cce_cluster.cluster.id
 
   values {
